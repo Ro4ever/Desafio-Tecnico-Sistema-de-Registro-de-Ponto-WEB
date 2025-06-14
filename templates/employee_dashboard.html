@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ponto - Sistema de Ponto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div>Bem-vindo, {{ user_name }}!</div>
+        <div>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Sair</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Registro de Ponto</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="current-time">
+            <p>Data: <span id="current-date">{{ current_date }}</span></p>
+            <p>Hora Atual: <span id="current-time">{{ current_time }}</span></p>
+        </div>
+
+        {% if alert_messages %}
+            <div class="alert-list">
+                <p><strong>Atenção:</strong></p>
+                <ul>
+                    {% for alert in alert_messages %}
+                        <li>{{ alert }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="actions">
+            <form action="{{ url_for('register_point', point_type='entrada_manha') }}" method="POST">
+                <button type="submit" class="btn" {% if not can_register['entrada_manha'] %}disabled{% endif %}>
+                    Entrada Manhã
+                </button>
+            </form>
+            <form action="{{ url_for('register_point', point_type='saida_manha') }}" method="POST">
+                <button type="submit" class="btn" {% if not can_register['saida_manha'] %}disabled{% endif %}>
+                    Saída Manhã
+                </button>
+            </form>
+            <form action="{{ url_for('register_point', point_type='entrada_tarde') }}" method="POST">
+                <button type="submit" class="btn" {% if not can_register['entrada_tarde'] %}disabled{% endif %}>
+                    Entrada Tarde
+                </button>
+            </form>
+            <form action="{{ url_for('register_point', point_type='saida_tarde') }}" method="POST">
+                <button type="submit" class="btn" {% if not can_register['saida_tarde'] %}disabled{% endif %}>
+                    Saída Tarde
+                </button>
+            </form>
+        </div>
+
+        <h2>Meus Registros de Hoje</h2>
+        {% if daily_records %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Registro</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in daily_records %}
+                    <tr>
+                        <td>{{ record.tipo_registro | replace("_", " ") | title }}</td>
+                        <td>{{ record.hora }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum registro de ponto para hoje.</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Funcionário - Sistema de Ponto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div><a href="{{ url_for('admin_dashboard') }}">Voltar para o Painel</a></div>
+        <div><a href="{{ url_for('logout') }}" class="btn btn-danger">Sair</a></div>
+    </nav>
+    <div class="container">
+        <h1>Cadastrar Novo Funcionário</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('register_employee') }}">
+            <div class="form-group">
+                <label for="matricula">Matrícula:</label>
+                <input type="text" id="matricula" name="matricula" required>
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <h3>Jornada de Trabalho Padrão:</h3>
+            <div class="form-group">
+                <label for="jornada_entrada_manha">Entrada Manhã (HH:MM):</label>
+                <input type="time" id="jornada_entrada_manha" name="jornada_entrada_manha" value="08:00" required>
+            </div>
+            <div class="form-group">
+                <label for="jornada_saida_manha">Saída Manhã (HH:MM):</label>
+                <input type="time" id="jornada_saida_manha" name="jornada_saida_manha" value="12:00" required>
+            </div>
+            <div class="form-group">
+                <label for="jornada_entrada_tarde">Entrada Tarde (HH:MM):</label>
+                <input type="time" id="jornada_entrada_tarde" name="jornada_entrada_tarde" value="14:00" required>
+            </div>
+            <div class="form-group">
+                <label for="jornada_saida_tarde">Saída Tarde (HH:MM):</label>
+                <input type="time" id="jornada_saida_tarde" name="jornada_saida_tarde" value="18:00" required>
+            </div>
+            <button type="submit" class="btn">Cadastrar</button>
+        </form>
+    </div>
+</body>
+</html>
